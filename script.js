@@ -9,27 +9,27 @@ const scroll = new LocomotiveScroll({
 // Connect Locomotive Scroll with GSAP ScrollTrigger
 scroll.on("scroll", ScrollTrigger.update);
 
-ScrollTrigger.scrollerProxy("[data-scroll-container]", {
-  scrollTop(value) {
-    return arguments.length
-      ? scroll.scrollTo(value, 0, 0)
-      : scroll.scroll.instance.scroll.y;
-  },
-  getBoundingClientRect() {
-    return {
-      top: 0,
-      left: 0,
-      width: window.innerWidth,
-      height: window.innerHeight,
-    };
-  },
-  pinType: document.querySelector("[data-scroll-container]").style.transform
-    ? "transform"
-    : "fixed",
-});
+// ScrollTrigger.scrollerProxy("[data-scroll-container]", {
+//   scrollTop(value) {
+//     return arguments.length
+//       ? scroll.scrollTo(value, 0, 0)
+//       : scroll.scroll.instance.scroll.y;
+//   },
+//   getBoundingClientRect() {
+//     return {
+//       top: 0,
+//       left: 0,
+//       width: window.innerWidth,
+//       height: window.innerHeight,
+//     };
+//   },
+//   pinType: document.querySelector("[data-scroll-container]").style.transform
+//     ? "transform"
+//     : "fixed",
+// });
 
-ScrollTrigger.addEventListener("refresh", () => scroll.update());
-ScrollTrigger.refresh();
+// ScrollTrigger.addEventListener("refresh", () => scroll.update());
+// ScrollTrigger.refresh();
 
 marquee.forEach((el) => {
   for (let i = 0; i < 25; i++) {
@@ -92,8 +92,7 @@ gsap.to(img, {
   scrollTrigger: {
     trigger: ".marquee", // The element that initiates the scroll action
     start: " top ", // When the top of the trigger hits the center of the viewport
-    end: "bottom 70%", // When the bottom of the trigger hits 20% from the bottom of the viewport
-    // scrub: 1, // Smoothly link the animation progress to the scroll position (1 means 1 second delay)
+    scrub: 1, // Smoothly link the animation progress to the scroll position (1 means 1 second delay)
     // markers: true, // IMPORTANT: Shows visual markers for debugging (start, end, etc.)
     toggleActions: "play none none reverse", // Defines what happens on scroll: onEnter, onLeave, onEnterBack, onLeaveBack
   },
@@ -113,25 +112,32 @@ arrowConfig.forEach(({ id, fromX }) => {
     duration: 1.5,
     ease: "power2.out",
     scrollTrigger: {
-      trigger: ".line",        // ✅ use parent section, not the SVG
+      trigger: ".line",       
       scroller: "[data-scroll-container]",  // ✅ tell ScrollTrigger about Locomotive
       start: "top 70%",
       end: "top 40%",
       scrub: 1,
-      markers: false,
     },
   });
 });
 
 const oval = document.querySelectorAll(".c");
-oval.forEach(el=>{
+oval.forEach((el)=>{
   gsap.set(el,{
-    opacity:0
-  })
-  gsap.to(el,{
     opacity:1,
-    duration:.5,
-    scrub:true
+    y:0
+  })
+  gsap.from(el,{
+    y:100,
+    opacity:0,
+    duration:1,
+    scrub:true,
+    yoyo:1,
+    scrollTrigger:{
+      trigger:".first",
+      start:"top 10%",
+      end:"bottom 50%",
+    }
   })
 })
 
